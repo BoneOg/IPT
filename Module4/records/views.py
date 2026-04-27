@@ -19,3 +19,15 @@ class StudentRecordViewSet(ModelViewSet):
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+import logging
+from django.http import JsonResponse
+from ratelimit.decorators import ratelimit
+
+logger = logging.getLogger('records')
+
+@ratelimit(key='ip', rate='5/m', block=True)
+def login_view(request):
+    # For lab purposes, we log the warning on access to show the trace
+    logger.warning("Multiple failed login attempts detected")
+    return JsonResponse({"message": "Login view accessed. Rate limit is active."})
