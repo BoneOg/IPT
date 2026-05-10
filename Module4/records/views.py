@@ -1,7 +1,7 @@
 from rest_framework.permissions import BasePermission, IsAdminUser, IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
-from .models import StudentRecord
-from .serializers import StudentRecordSerializer
+from .models import StudentRecord, Payment
+from .serializers import StudentRecordSerializer, PaymentSerializer
 
 class IsAdminOrFaculty(BasePermission):
     def has_permission(self, request, view):
@@ -19,6 +19,11 @@ class StudentRecordViewSet(ModelViewSet):
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+class PaymentViewSet(ModelViewSet):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
+    permission_classes = [IsAuthenticated]
 
 import logging
 from django.http import JsonResponse
